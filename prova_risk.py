@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[ ]:
+
+
 import streamlit as st
 import numpy as np
 from sklearn.linear_model import LogisticRegression
@@ -14,23 +20,9 @@ x_columns = [
 ]
 
 # Crea un Logistic Regression come esempio
-log_reg = LogisticRegression(max_iter=1000, random_state=42)  # Aggiungi random_state
-
-# Crea un DataFrame di esempio con valori casuali per addestrare il modello
-# Aumenta la varianza dei dati per simulare una distribuzione più realistica
-sample_data = pd.DataFrame({
-    "Age": np.random.randint(18, 80, size=100),
-    "Sex": np.random.randint(0, 2, size=100),  # 0 = femmina, 1 = maschio
-    "BMI": np.random.uniform(18.5, 40.0, size=100),  # BMI variabili tra 18.5 e 40.0
-    "Alcohol_Consumption": np.random.randint(0, 21, size=100),  # Alcol a settimana (0-20 unità)
-    "Smoking": np.random.randint(0, 2, size=100),  # 0 = No, 1 = Sì
-    "Genetic_Risk": np.random.randint(0, 3, size=100),  # 0 = Basso, 1 = Medio, 2 = Alto
-    "Physical_Activity": np.random.randint(0, 10, size=100),  # Ore settimanali di attività fisica
-    "Diabetes": np.random.randint(0, 2, size=100),  # 0 = No, 1 = Sì
-    "Hypertension": np.random.randint(0, 2, size=100)  # 0 = No, 1 = Sì
-})
-sample_data['Diagnosis'] = np.random.randint(0, 2, size=100)  # Diagnosi casuale (0 = sano, 1 = malato)
-
+log_reg = LogisticRegression(max_iter=1000, random_state=42)
+sample_data = pd.DataFrame(np.random.rand(100, len(x_columns)), columns=x_columns)
+sample_data['Diagnosis'] = np.random.randint(2, size=100)
 X = sample_data.drop('Diagnosis', axis=1)
 y = sample_data['Diagnosis']
 log_reg.fit(X, y)
@@ -66,6 +58,3 @@ if st.button("Calcola Rischio"):
 
     result = predict_risk(age, sex_encoded, weight, height, alcohol_consumption, smoking_encoded, genetic_risk_encoded, physical_activity, diabetes_encoded, hypertension_encoded)
     st.success(f"Il tuo rischio di malattia epatica è: {result}")
-
-
-
