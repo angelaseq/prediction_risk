@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split, ShuffleSplit
 np.random.seed(42)
 
 # Carica i dati (inserisci il percorso corretto per il file CSV)
-df = pd.read_csv("/home/angela/Scaricati/Liver_disease_data.csv")
+df = pd.read_csv("Liver_disease_data.csv")
 
 # Pre-elaborazione dei dati
 df = df.drop('LiverFunctionTest', axis=1)
