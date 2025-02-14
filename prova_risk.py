@@ -1,43 +1,64 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
-
-
-import streamlit as st
-import numpy as np
-from sklearn.linear_model import LogisticRegression
 import pandas as pd
+import numpy as np
+import streamlit as st
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split, ShuffleSplit
 
 # Fissa il seme per garantire la riproducibilità
 np.random.seed(42)
 
-# Simula il caricamento del modello e i dati
-# Sostituisci con il tuo modello addestrato e dataset
-x_columns = [
-    "Age", "Sex", "BMI", "Alcohol_Consumption", "Smoking", 
-    "Genetic_Risk", "Physical_Activity", "Diabetes", "Hypertension"
-]
+# Carica i dati (inserisci il percorso corretto per il file CSV)
+df = pd.read_csv("/home/angela/Scaricati/Liver_disease_data.csv")
 
-# Crea un Logistic Regression come esempio
-log_reg = LogisticRegression(max_iter=1000, random_state=42)
-sample_data = pd.DataFrame(np.random.rand(100, len(x_columns)), columns=x_columns)
-sample_data['Diagnosis'] = np.random.randint(2, size=100)
-X = sample_data.drop('Diagnosis', axis=1)
-y = sample_data['Diagnosis']
-log_reg.fit(X, y)
+# Pre-elaborazione dei dati
+df = df.drop('LiverFunctionTest', axis=1)
+df['Gender'] = df['Gender'].map({0: 1, 1: 0})
+df = df.rename(columns={'Gender': 'Sex'})
 
+# Dividi i dati in X (features) e y (target)
+x = df.drop('Diagnosis', axis=1)
+y = df['Diagnosis']
+
+# Suddividi i dati in training e test set
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+
+# Crea e allena il modello di regressione logistica
+log_reg = LogisticRegression(max_iter=1000)
+log_reg.fit(X_train, y_train)
+
+# Funzione per fare una previsione del rischio
 def predict_risk(age, sex, weight, height, alcohol_consumption, smoking, genetic_risk, physical_activity, diabetes, hypertension):
+    data = np.zeros(len(x.columns))
     bmi = weight / (height ** 2)
-    data = np.array([[age, sex, bmi, alcohol_consumption, smoking, genetic_risk, physical_activity, diabetes, hypertension]])
-    probabilities = log_reg.predict_proba(data)
+    
+    # Assegna i valori delle variabili nel vettore
+    data[0] = age
+    data[1] = sex
+    data[2] = bmi
+    data[3] = alcohol_consumption
+    data[4] = smoking
+    data[5] = genetic_risk
+    data[6] = physical_activity
+    data[7] = diabetes
+    data[8] = hypertension
+    
+    probabilities = log_reg.predict_proba([data])
+    
+    # Calcola la probabilità di rischio e restituiscila come stringa
     risk_percentage = probabilities[0, 1] * 100
-    return f"{risk_percentage:.2f}%"
+    risk_percentage_string = f"{risk_percentage:.2f}%"
+    
+    return risk_percentage_string
 
 # Streamlit App
 st.title("Liver Disease Risk Prediction")
 
 st.header("Inserisci i tuoi dati:")
+
+# Widget per raccogliere i dati dell'utente
 age = st.slider("Età", 18, 100, 30)
 sex = st.selectbox("Sesso", ("Maschio", "Femmina"))
 weight = st.number_input("Peso (kg)", min_value=30.0, max_value=200.0, value=70.0)
@@ -49,6 +70,7 @@ physical_activity = st.slider("Attività Fisica (ore a settimana)", 0, 40, 5)
 diabetes = st.selectbox("Diabete", ("No", "Sì"))
 hypertension = st.selectbox("Ipertensione", ("No", "Sì"))
 
+# Bottone per calcolare il rischio
 if st.button("Calcola Rischio"):
     sex_encoded = 1 if sex == "Maschio" else 0
     smoking_encoded = 1 if smoking == "Sì" else 0
@@ -56,5 +78,7 @@ if st.button("Calcola Rischio"):
     diabetes_encoded = 1 if diabetes == "Sì" else 0
     hypertension_encoded = 1 if hypertension == "Sì" else 0
 
+    # Calcola e mostra il rischio
     result = predict_risk(age, sex_encoded, weight, height, alcohol_consumption, smoking_encoded, genetic_risk_encoded, physical_activity, diabetes_encoded, hypertension_encoded)
     st.success(f"Il tuo rischio di malattia epatica è: {result}")
+
