@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
-
-
 import streamlit as st
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
+
+# Fissa il seme per garantire la riproducibilità
+np.random.seed(42)
 
 # Simula il caricamento del modello e i dati
 # Sostituisci con il tuo modello addestrato e dataset
@@ -17,7 +17,9 @@ x_columns = [
 ]
 
 # Crea un Logistic Regression come esempio
-log_reg = LogisticRegression(max_iter=1000)
+log_reg = LogisticRegression(max_iter=1000, random_state=42)  # Aggiungi random_state
+
+# Crea un DataFrame di esempio con valori casuali per addestrare il modello
 sample_data = pd.DataFrame(np.random.rand(100, len(x_columns)), columns=x_columns)
 sample_data['Diagnosis'] = np.random.randint(2, size=100)
 X = sample_data.drop('Diagnosis', axis=1)
@@ -55,4 +57,5 @@ if st.button("Calcola Rischio"):
 
     result = predict_risk(age, sex_encoded, weight, height, alcohol_consumption, smoking_encoded, genetic_risk_encoded, physical_activity, diabetes_encoded, hypertension_encoded)
     st.success(f"Il tuo rischio di malattia epatica è: {result}")
+
 
