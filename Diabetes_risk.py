@@ -52,7 +52,7 @@ st.title("Diabetes Risk Prediction")
 st.header("Inserisci i tuoi dati:")
 
 # Widget per raccogliere i dati dell'utente
-Pregnancies = st.slider("Figli", 0, 15, 2)
+Pregnancies = st.slider("Gravidanze", 0, 10, 2)
 Glucose = st.slider("Glucosio", 50, 250, 80)
 BloodPressure = st.slider("Pressione Sanguigna", 40, 150, 70)
 Insulin = st.number_input("Insulina", min_value=0.0, max_value=800.0, value=70.0)
