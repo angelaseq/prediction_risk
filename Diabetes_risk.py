@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split, ShuffleSplit
+from sklearn.model_selection import train_test_split
 
 # Fissa il seme per garantire la riproducibilità
 np.random.seed(42)
@@ -55,15 +55,17 @@ st.header("Inserisci i tuoi dati:")
 Pregnancies = st.slider("Figli", 0, 15, 2)
 Glucose = st.slider("Glucosio", 50, 250, 80)
 BloodPressure = st.slider("Pressione Sanguigna", 40, 150, 70)
+SkinThickness = st.slider("Spessore della pelle", 10, 100, 20)  # Aggiunto SkinThickness come slider
 Insulin = st.number_input("Insulina", min_value=0, max_value=800.0, value=70.0)
 weight = st.number_input("Peso (kg)", min_value=30.0, max_value=200.0, value=70.0)
 height = st.number_input("Altezza (m)", min_value=1.0, max_value=2.5, value=1.75)
-# Bottone per calcolare il BMI
-if st.button('Calcola BMI'):
-    # Calcola il BMI
-    BMI = weight / (height ** 2)
 Age = st.slider("Età", 1, 90, 30)
 
+# Calcola automaticamente il BMI
+BMI = weight / (height ** 2)
+
 # Bottone per calcolare il rischio
-result = predict_risk(Pregnancies, Glucose, BloodPressure, Insulin, BMI, Age)
-st.success(f"Il tuo rischio di diabete è: {result}")
+if st.button('Calcola rischio di diabete'):
+    result = predict_risk(Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin, BMI, 0.5, Age)  # Assumiamo un valore medio per DiabetesPedigreeFunction
+    st.success(f"Il tuo rischio di diabete è: {result}")
+
