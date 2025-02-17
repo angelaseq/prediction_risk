@@ -66,4 +66,4 @@ Age = st.slider("Età", 1, 90, 30)
 
 # Bottone per calcolare il rischio
 result = predict_risk(Pregnancies, Glucose, BloodPressure, Insulin, BMI, Age)
-    st.success(f"Il tuo rischio di diabete è: {result}")
+st.success(f"Il tuo rischio di diabete è: {result}")
