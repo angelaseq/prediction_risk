@@ -14,7 +14,7 @@ np.random.seed(42)
 # Carica i dati (inserisci il percorso corretto per il file CSV)
 df = pd.read_csv("osteoporosis.csv")
 
-# Preprocessing: codifica variabili categoriche come "Gender" e "Race/Ethnicity"
+# Codifica le variabili categoriche
 le = LabelEncoder()
 df['Gender'] = le.fit_transform(df['Gender'])
 df['Race/Ethnicity'] = le.fit_transform(df['Race/Ethnicity'])
@@ -23,8 +23,12 @@ df['Smoking'] = le.fit_transform(df['Smoking'])
 df['Alcohol Consumption'] = le.fit_transform(df['Alcohol Consumption'])
 
 # Dividi i dati in X (features) e y (target)
-x = df.drop('Osteoporosis', axis=1)  # Assumiamo che 'Osteoporosis' sia la variabile target
+x = df.drop('Osteoporosis', axis=1)
 y = df['Osteoporosis']
+
+# Assicurati che X e y siano numerici
+x = x.apply(pd.to_numeric, errors='coerce')  # Converte tutte le colonne in numerico
+y = pd.to_numeric(y, errors='coerce')  # Converte la colonna target in numerico
 
 # Suddividi i dati in training e test set
 X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
