@@ -25,7 +25,7 @@ log_reg = LogisticRegression(max_iter=1000)
 log_reg.fit(X_train, y_train)
 
 # Funzione per fare una previsione del rischio
-def predict_risk(Age, Gender, HormonalChanges, FamilyHistory, Race/Ethnicity, BodyWeight, CalciumIntake, VitaminDIntake, PhysicalActivity, Smoking, AlcoholConsumption, MedicalConditions, Medications, PriorFractures):
+def predict_risk(Age, Gender, HormonalChanges, FamilyHistory, Ethnicity, BodyWeight, CalciumIntake, VitaminDIntake, PhysicalActivity, Smoking, AlcoholConsumption, MedicalConditions, Medications, PriorFractures):
     data = np.zeros(len(x.columns))
     
     # Assegna i valori delle variabili nel vettore
@@ -33,7 +33,7 @@ def predict_risk(Age, Gender, HormonalChanges, FamilyHistory, Race/Ethnicity, Bo
     data[1] = Gender
     data[2] = HormonalChanges
     data[3] = FamilyHistory
-    data[4] = Race/Ethnicity
+    data[4] = Ethnicity
     data[5] = BodyWeight
     data[6] = CalciumIntake
     data[7] = VitaminDIntake
