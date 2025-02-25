@@ -14,7 +14,7 @@ np.random.seed(42)
 df = pd.read_csv("Osteoporosis.csv")
 
 # Dividi i dati in X (features) e y (target)
-x = df.drop('Osteoporosis', axis=0)
+x = df.drop('Osteoporosis', axis=1)
 y = df['Osteoporosis']
 
 # Suddividi i dati in training e test set
