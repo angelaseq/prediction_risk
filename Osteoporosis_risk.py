@@ -27,7 +27,6 @@ def predict_risk(Age, Gender, HormonalChanges, FamilyHistory, BodyWeight, Calciu
     Gender = 1 if Gender == "Femmina" else 0
     HormonalChanges = 1 if HormonalChanges == "Postmenopausa" else 0
     FamilyHistory = 1 if FamilyHistory == "Sì" else 0
-    Ethnicity = 1 if Ethnicity == "Caucasico" else 0  # Aggiungi altre etnie se necessario
     
     # Codifica il BodyWeight
     if BodyWeight == "Normale":
