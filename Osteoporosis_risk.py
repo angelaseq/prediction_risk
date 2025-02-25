@@ -22,7 +22,7 @@ log_reg = LogisticRegression(max_iter=1000)
 log_reg.fit(X_train, y_train)
 
 # Funzione per fare una previsione del rischio
-def predict_risk(Age, Gender, HormonalChanges, FamilyHistory, Ethnicity, BodyWeight, CalciumIntake, VitaminDIntake, PhysicalActivity, Smoking, AlcoholConsumption, MedicalConditions, Medications, PriorFractures):
+def predict_risk(Age, Gender, HormonalChanges, FamilyHistory, BodyWeight, CalciumIntake, VitaminDIntake, PhysicalActivity, Smoking, AlcoholConsumption, MedicalConditions, Medications, PriorFractures):
     # Codifica variabili categoriche
     Gender = 1 if Gender == "Femmina" else 0
     HormonalChanges = 1 if HormonalChanges == "Postmenopausa" else 0
