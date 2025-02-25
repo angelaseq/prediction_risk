@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 np.random.seed(42)
 
 # Carica i dati (inserisci il percorso corretto per il file CSV)
-df = pd.read_csv("Osteoporosis.csv")
+df = pd.read_csv("Osteoporosis.csv", sep="\t")
 
 # Dividi i dati in X (features) e y (target)
 x = df.drop('Osteoporosis', axis=1)
