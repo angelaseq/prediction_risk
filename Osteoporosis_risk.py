@@ -65,16 +65,15 @@ def predict_risk(Age, Gender, HormonalChanges, FamilyHistory, Ethnicity, BodyWei
     data[1] = Gender
     data[2] = HormonalChanges
     data[3] = FamilyHistory
-    data[4] = Ethnicity
-    data[5] = BodyWeight
-    data[6] = CalciumIntake
-    data[7] = VitaminDIntake
-    data[8] = PhysicalActivity
-    data[9] = Smoking
-    data[10] = AlcoholConsumption
-    data[11] = MedicalConditions
-    data[12] = Medications
-    data[13] = PriorFractures
+    data[4] = BodyWeight
+    data[5] = CalciumIntake
+    data[6] = VitaminDIntake
+    data[7] = PhysicalActivity
+    data[8] = Smoking
+    data[9] = AlcoholConsumption
+    data[10] = MedicalConditions
+    data[11] = Medications
+    data[12] = PriorFractures
     
     # Calcola la probabilità di rischio usando il modello
     probabilities = log_reg.predict_proba([data])
@@ -107,5 +106,5 @@ PriorFractures = st.selectbox("Fratture Precedenti", ["Sì", "No"])
 
 # Bottone per calcolare il rischio
 if st.button('Calcola rischio di osteoporosi'):
-    result = predict_risk(Age, Gender, HormonalChanges, FamilyHistory, "Caucasico", BodyWeight, CalciumIntake, VitaminDIntake, PhysicalActivity, Smoking, AlcoholConsumption, MedicalConditions, Medications, PriorFractures)
+    result = predict_risk(Age, Gender, HormonalChanges, FamilyHistory, BodyWeight, CalciumIntake, VitaminDIntake, PhysicalActivity, Smoking, AlcoholConsumption, MedicalConditions, Medications, PriorFractures)
     st.success(f"Il tuo rischio di osteoporosi è: {result}")
