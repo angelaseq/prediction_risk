@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 import pandas as pd
 import numpy as np
 import streamlit as st
@@ -26,9 +23,44 @@ log_reg.fit(X_train, y_train)
 
 # Funzione per fare una previsione del rischio
 def predict_risk(Age, Gender, HormonalChanges, FamilyHistory, Ethnicity, BodyWeight, CalciumIntake, VitaminDIntake, PhysicalActivity, Smoking, AlcoholConsumption, MedicalConditions, Medications, PriorFractures):
-    data = np.zeros(len(x.columns))
+    # Codifica variabili categoriche
+    Gender = 1 if Gender == "Femmina" else 0
+    HormonalChanges = 1 if HormonalChanges == "Postmenopausa" else 0
+    FamilyHistory = 1 if FamilyHistory == "Sì" else 0
+    Ethnicity = 1 if Ethnicity == "Caucasico" else 0  # Aggiungi altre etnie se necessario
     
-    # Assegna i valori delle variabili nel vettore
+    # Codifica il BodyWeight
+    if BodyWeight == "Normale":
+        BodyWeight = 0
+    elif BodyWeight == "Sottopeso":
+        BodyWeight = -1
+    else:
+        BodyWeight = 1  # Sovrappeso
+    
+    # Codifica l'assunzione di calcio e vitamina D
+    CalciumIntake = 1 if CalciumIntake == "Adeguato" else 0
+    VitaminDIntake = 1 if VitaminDIntake == "Sufficiente" else 0
+    
+    # Codifica l'attività fisica
+    PhysicalActivity = 1 if PhysicalActivity == "Attivo" else 0
+    
+    # Codifica il fumo
+    Smoking = 1 if Smoking == "Sì" else 0
+    
+    # Codifica il consumo di alcol
+    AlcoholConsumption = {"No": 0, "Moderato": 1, "Alto": 2}[AlcoholConsumption]
+    
+    # Codifica altre patologie
+    MedicalConditions = 1 if MedicalConditions == "Artrite reumatoide" else 0  # Aggiungi altre patologie
+    
+    # Codifica l'assunzione di farmaci
+    Medications = 1 if Medications == "Corticosteroidi" else 0
+    
+    # Codifica fratture precedenti
+    PriorFractures = 1 if PriorFractures == "Sì" else 0
+    
+    # Crea il vettore di input per la previsione
+    data = np.zeros(len(x.columns))
     data[0] = Age
     data[1] = Gender
     data[2] = HormonalChanges
@@ -44,6 +76,7 @@ def predict_risk(Age, Gender, HormonalChanges, FamilyHistory, Ethnicity, BodyWei
     data[12] = Medications
     data[13] = PriorFractures
     
+    # Calcola la probabilità di rischio usando il modello
     probabilities = log_reg.predict_proba([data])
     
     # Calcola la probabilità di rischio e restituiscila come stringa
@@ -72,9 +105,7 @@ MedicalConditions = st.selectbox("Altre patologie", ["No", "Artrite reumatoide",
 Medications = st.selectbox("Assunzione di Farmaci", ["Corticosteroidi", "No"])
 PriorFractures = st.selectbox("Fratture Precedenti", ["Sì", "No"])
 
-
-
 # Bottone per calcolare il rischio
 if st.button('Calcola rischio di osteoporosi'):
-    result = predict_risk(Age, Gender, HormonalChanges, FamilyHistory, "caucasico", BodyWeight, CalciumIntake, VitaminDIntake, PhysicalActivity, Smoking, AlcoholConsumption, MedicalConditions, Medications, PriorFractures)
+    result = predict_risk(Age, Gender, HormonalChanges, FamilyHistory, "Caucasico", BodyWeight, CalciumIntake, VitaminDIntake, PhysicalActivity, Smoking, AlcoholConsumption, MedicalConditions, Medications, PriorFractures)
     st.success(f"Il tuo rischio di osteoporosi è: {result}")
