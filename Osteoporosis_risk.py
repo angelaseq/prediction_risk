@@ -3,9 +3,7 @@ import numpy as np
 import streamlit as st
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import MinMaxScaler
-
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 
 # Fissa il seme per garantire la riproducibilità
 np.random.seed(42)
@@ -13,14 +11,17 @@ np.random.seed(42)
 # Carica i dati (inserisci il percorso corretto per il file CSV)
 df = pd.read_csv("Osteoporosis.csv")
 
+# Codifica le variabili categoriche
 for col in df.columns:
     if df[col].dtype == 'object':
         le = LabelEncoder()
         df[col] = le.fit_transform(df[col])
 
+# Normalizza le colonne numeriche
 scaler = MinMaxScaler()
 
-df_normalized = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+# Normalizza solo la colonna 'Age'
+df['Age'] = scaler.fit_transform(df[['Age']])
 
 # Dividi i dati in X (features) e y (target)
 x = df.drop('Osteoporosis', axis=1)
@@ -70,7 +71,7 @@ def predict_risk(Age, Gender, HormonalChanges, FamilyHistory, BodyWeight, Calciu
     # Codifica fratture precedenti
     PriorFractures = 1 if PriorFractures == "Sì" else 0
     
-    # Normalizza l'età dell'utente
+    # Normalizza l'età dell'utente (applica lo stesso scaler usato durante l'allenamento del modello)
     age_normalized = scaler.transform([[Age]])[0][0]
     
     # Crea il vettore di input per la previsione
@@ -122,4 +123,5 @@ PriorFractures = st.selectbox("Fratture Precedenti", ["Si", "No"])
 if st.button('Calcola rischio di osteoporosi'):
     result = predict_risk(Age, Gender, HormonalChanges, FamilyHistory, BodyWeight, CalciumIntake, VitaminDIntake, PhysicalActivity, Smoking, AlcoholConsumption, MedicalConditions, Medications, PriorFractures)
     st.success(f"Il tuo rischio di osteoporosi è: {result}")
+
 
