@@ -11,13 +11,18 @@ np.random.seed(42)
 # Carica i dati (inserisci il percorso corretto per il file CSV)
 df = pd.read_csv("Osteoporosis.csv")
 
+for col in df.columns:
+    if df[col].dtype == 'object':
+        le = LabelEncoder()
+        df[col] = le.fit_transform(df[col])
+
+scaler = MinMaxScaler()
+
+df_normalized = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+
 # Dividi i dati in X (features) e y (target)
 x = df.drop('Osteoporosis', axis=1)
 y = df['Osteoporosis']
-
-# Normalizza l'età
-scaler = StandardScaler()
-x['Age'] = scaler.fit_transform(x[['Age']])
 
 # Suddividi i dati in training e test set
 X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
